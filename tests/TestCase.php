@@ -1,8 +1,10 @@
 <?php
 
-namespace Keepcloud\Pagarme\Tests;
+declare(strict_types=1);
 
-use Keepcloud\Pagarme\PagarmeServiceProvider;
+namespace Anisotton\Pagarme\Tests;
+
+use Anisotton\Pagarme\PagarmeServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra

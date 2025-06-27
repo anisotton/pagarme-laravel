@@ -1,9 +1,11 @@
 <?php
 
-namespace Keepcloud\Pagarme\Tests\Unit;
+declare(strict_types=1);
 
-use Keepcloud\Pagarme\Contracts\Payments\Item;
-use Keepcloud\Pagarme\Tests\TestCase;
+namespace Anisotton\Pagarme\Tests\Unit;
+
+use Anisotton\Pagarme\Contracts\Payments\Item;
+use Anisotton\Pagarme\Tests\TestCase;
 
 class ItemTest extends TestCase
 {
@@ -12,7 +14,7 @@ class ItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->item = new Item();
+        $this->item = new Item;
     }
 
     public function test_can_create_item(): void

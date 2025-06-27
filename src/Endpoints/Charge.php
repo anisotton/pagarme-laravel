@@ -95,6 +95,7 @@ class Charge extends ApiAdapter
     public function createPix(array $data): ResponseInterface
     {
         $data['payment_method'] = 'pix';
+
         return $this->create($data);
     }
 
@@ -104,6 +105,7 @@ class Charge extends ApiAdapter
     public function createBoleto(array $data): ResponseInterface
     {
         $data['payment_method'] = 'boleto';
+
         return $this->create($data);
     }
 
@@ -113,6 +115,7 @@ class Charge extends ApiAdapter
     public function createCreditCard(array $data): ResponseInterface
     {
         $data['payment_method'] = 'credit_card';
+
         return $this->create($data);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Exemplo completo de uso do Pagarme Laravel Package
  *
@@ -7,9 +9,9 @@
  * seguindo as melhores práticas do Laravel 12 e PHP 8.3+
  */
 
-use Anisotton\Pagarme\Facades\Pagarme;
-use Anisotton\Pagarme\DataTransferObjects\CustomerDto;
 use Anisotton\Pagarme\DataTransferObjects\ChargeDto;
+use Anisotton\Pagarme\DataTransferObjects\CustomerDto;
+use Anisotton\Pagarme\Facades\Pagarme;
 use Anisotton\Pagarme\Support\PaymentHelper;
 
 class PagarmeExampleUsage
@@ -25,7 +27,7 @@ class PagarmeExampleUsage
             email: 'joao@example.com',
             document: '11144477735', // CPF válido para teste
             phones: [
-                'home_phone' => PaymentHelper::formatPhone('11987654321')
+                'home_phone' => PaymentHelper::formatPhone('11987654321'),
             ],
             address: [
                 'line_1' => 'Rua das Flores, 123',
@@ -33,11 +35,11 @@ class PagarmeExampleUsage
                 'zip_code' => '01234567',
                 'city' => 'São Paulo',
                 'state' => 'SP',
-                'country' => 'BR'
+                'country' => 'BR',
             ],
             metadata: [
                 'source' => 'website',
-                'campaign' => 'summer_2025'
+                'campaign' => 'summer_2025',
             ]
         );
 
@@ -57,7 +59,7 @@ class PagarmeExampleUsage
             customerId: $customerId,
             metadata: [
                 'order_id' => 'ORDER-12345',
-                'product' => 'Produto Premium'
+                'product' => 'Produto Premium',
             ]
         );
 
@@ -75,7 +77,7 @@ class PagarmeExampleUsage
         // Validar cartão antes de processar
         $cardNumber = '4111111111111111';
 
-        if (!PaymentHelper::isValidCreditCard($cardNumber)) {
+        if (! PaymentHelper::isValidCreditCard($cardNumber)) {
             throw new \InvalidArgumentException('Cartão de crédito inválido');
         }
 
@@ -92,8 +94,8 @@ class PagarmeExampleUsage
                     'exp_month' => 12,
                     'exp_year' => 2025,
                     'cvv' => '123',
-                    'brand' => $brand
-                ]
+                    'brand' => $brand,
+                ],
             ],
             customerId: $customerId,
             metadata: [
@@ -102,7 +104,7 @@ class PagarmeExampleUsage
                     PaymentHelper::currencyToCents(199.90),
                     3,
                     2.5 // 2.5% de juros ao mês
-                )
+                ),
             ]
         );
 
@@ -125,7 +127,7 @@ class PagarmeExampleUsage
             dueAt: $dueDate,
             metadata: [
                 'order_id' => 'ORDER-12347',
-                'due_date_human' => now()->addDays(3)->format('d/m/Y')
+                'due_date_human' => now()->addDays(3)->format('d/m/Y'),
             ]
         );
 
@@ -155,14 +157,14 @@ class PagarmeExampleUsage
                     'name' => 'Acesso Premium',
                     'quantity' => 1,
                     'pricing_scheme' => [
-                        'price' => PaymentHelper::currencyToCents(99.90)
-                    ]
-                ]
+                        'price' => PaymentHelper::currencyToCents(99.90),
+                    ],
+                ],
             ],
             'metadata' => [
                 'category' => 'premium',
-                'features' => 'unlimited_access,priority_support'
-            ]
+                'features' => 'unlimited_access,priority_support',
+            ],
         ];
 
         $response = Pagarme::plan()->create($planData);
@@ -185,13 +187,13 @@ class PagarmeExampleUsage
                 'holder_name' => 'JOAO SILVA',
                 'exp_month' => 12,
                 'exp_year' => 2025,
-                'cvv' => '123'
+                'cvv' => '123',
             ],
             'start_at' => now()->addDays(1)->toISOString(),
             'metadata' => [
                 'source' => 'website',
-                'promo_code' => 'WELCOME2025'
-            ]
+                'promo_code' => 'WELCOME2025',
+            ],
         ];
 
         $response = Pagarme::subscription()->create($subscriptionData);
@@ -212,7 +214,7 @@ class PagarmeExampleUsage
             \Log::info('Pagarme Webhook Received', [
                 'type' => $data['type'] ?? 'unknown',
                 'id' => $data['id'] ?? null,
-                'timestamp' => now()->toISOString()
+                'timestamp' => now()->toISOString(),
             ]);
 
             // Processar diferentes tipos de eventos
@@ -234,13 +236,14 @@ class PagarmeExampleUsage
 
                 default:
                     \Log::warning('Unhandled webhook type', ['type' => $data['type']]);
+
                     return ['status' => 'ignored'];
             }
 
         } catch (\Exception $e) {
             \Log::error('Webhook processing error', [
                 'error' => $e->getMessage(),
-                'payload_preview' => substr($payload, 0, 100)
+                'payload_preview' => substr($payload, 0, 100),
             ]);
 
             throw $e;
@@ -260,7 +263,7 @@ class PagarmeExampleUsage
 
         \Log::info('Charge paid successfully', [
             'charge_id' => $chargeId,
-            'amount' => $amount
+            'amount' => $amount,
         ]);
 
         return ['status' => 'processed', 'action' => 'charge_paid'];
@@ -276,7 +279,7 @@ class PagarmeExampleUsage
 
         \Log::warning('Charge failed', [
             'charge_id' => $chargeId,
-            'reason' => $reason
+            'reason' => $reason,
         ]);
 
         return ['status' => 'processed', 'action' => 'charge_failed'];
@@ -292,7 +295,7 @@ class PagarmeExampleUsage
 
         \Log::info('Charge refunded', [
             'charge_id' => $chargeId,
-            'refund_amount' => $refundAmount
+            'refund_amount' => $refundAmount,
         ]);
 
         return ['status' => 'processed', 'action' => 'charge_refunded'];
@@ -306,7 +309,7 @@ class PagarmeExampleUsage
         $subscriptionId = $data['data']['id'];
 
         \Log::info('Subscription created', [
-            'subscription_id' => $subscriptionId
+            'subscription_id' => $subscriptionId,
         ]);
 
         return ['status' => 'processed', 'action' => 'subscription_created'];
@@ -320,7 +323,7 @@ class PagarmeExampleUsage
         $subscriptionId = $data['data']['id'];
 
         \Log::info('Subscription canceled', [
-            'subscription_id' => $subscriptionId
+            'subscription_id' => $subscriptionId,
         ]);
 
         return ['status' => 'processed', 'action' => 'subscription_canceled'];
@@ -350,23 +353,23 @@ class PagarmeExampleUsage
                 'charges' => [
                     'pix' => $pixCharge,
                     'credit_card' => $creditCardCharge,
-                    'boleto' => $boletoCharge
+                    'boleto' => $boletoCharge,
                 ],
                 'subscription' => [
                     'plan' => $plan,
-                    'subscription' => $subscription
-                ]
+                    'subscription' => $subscription,
+                ],
             ];
 
         } catch (\Exception $e) {
             \Log::error('Complete flow error', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
 
             return [
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ];
         }
     }

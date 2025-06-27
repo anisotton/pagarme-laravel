@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Exemplo de uso do Pagarme Laravel Package
  *
@@ -19,8 +21,8 @@ $customerData = [
         'home_phone' => [
             'country_code' => '55',
             'area_code' => '11',
-            'number' => '987654321'
-        ]
+            'number' => '987654321',
+        ],
     ],
     'address' => [
         'line_1' => 'Rua das Flores, 123',
@@ -28,8 +30,8 @@ $customerData = [
         'zip_code' => '01234567',
         'city' => 'São Paulo',
         'state' => 'SP',
-        'country' => 'BR'
-    ]
+        'country' => 'BR',
+    ],
 ];
 
 // Criar cliente
@@ -75,11 +77,11 @@ $orderData = [
                     'exp_month' => 12,
                     'exp_year' => 2025,
                     'cvv' => '123',
-                    'billing_address' => $address
-                ]
-            ]
-        ]
-    ]
+                    'billing_address' => $address,
+                ],
+            ],
+        ],
+    ],
 ];
 
 // Criar pedido
@@ -99,15 +101,15 @@ $chargeData = [
     'credit_card' => [
         'installments' => 1,
         'statement_descriptor' => 'COBRANCA',
-        'card_id' => $cardId // ID de um cartão já salvo
-    ]
+        'card_id' => $cardId, // ID de um cartão já salvo
+    ],
 ];
 
 $charge = Pagarme::charge()->create($chargeData);
 
 // 7. Capturando uma cobrança
 $capture = Pagarme::charge()->capture($chargeId, [
-    'amount' => 1500 // Valor a ser capturado (opcional)
+    'amount' => 1500, // Valor a ser capturado (opcional)
 ]);
 
 // 8. Criando uma assinatura
@@ -115,7 +117,7 @@ $subscriptionData = [
     'customer_id' => $customerId,
     'plan_id' => $planId,
     'payment_method' => 'credit_card',
-    'card_id' => $cardId
+    'card_id' => $cardId,
 ];
 
 $subscription = Pagarme::subscription()->create($subscriptionData);

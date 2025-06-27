@@ -27,7 +27,7 @@ class PagarmeException extends Exception
 
     public function hasErrors(): bool
     {
-        return !empty($this->errors);
+        return ! empty($this->errors);
     }
 
     public static function invalidApiKey(): self

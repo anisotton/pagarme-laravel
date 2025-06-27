@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Anisotton\Pagarme\Endpoints;
 
 use Anisotton\Pagarme\Utils\ApiAdapter;
@@ -8,8 +10,6 @@ class Subscription extends ApiAdapter
 {
     /**
      * Criar assinatura avulsa / Criar assinatura de plano
-     *
-     * @param array $data
      */
     public function create(array $data)
     {
@@ -19,7 +19,7 @@ class Subscription extends ApiAdapter
     /**
      * Obter assinatura
      *
-     * @param string $id
+     * @param  string  $id
      */
     public function find($id)
     {
@@ -28,17 +28,16 @@ class Subscription extends ApiAdapter
 
     /**
      * Listar assinaturas
-     *
      */
     public function all(array $queryParams = [])
     {
-        return $this->get("subscriptions", $queryParams);
+        return $this->get('subscriptions', $queryParams);
     }
 
     /**
      * Cancelar assinatura
      *
-     * @param string $id
+     * @param  string  $id
      */
     public function cancel($id)
     {
@@ -47,7 +46,8 @@ class Subscription extends ApiAdapter
 
     /**
      * Editar cartão da assinatura
-     * @param string $id
+     *
+     * @param  string  $id
      */
     public function updateCard($id, $data)
     {
@@ -56,7 +56,8 @@ class Subscription extends ApiAdapter
 
     /**
      * Editar metadados da assinatura
-     * @param string $id
+     *
+     * @param  string  $id
      */
     public function updateMetadata($id)
     {
@@ -65,7 +66,8 @@ class Subscription extends ApiAdapter
 
     /**
      * Editar meio de pagamento da assinatura
-     * @param string $id
+     *
+     * @param  string  $id
      */
     public function updatePaymentMethod($id)
     {
@@ -74,7 +76,8 @@ class Subscription extends ApiAdapter
 
     /**
      * Editar data de início da assinatura
-     * @param string $id
+     *
+     * @param  string  $id
      */
     public function updateStartAt($id)
     {
@@ -83,7 +86,8 @@ class Subscription extends ApiAdapter
 
     /**
      * Editar preço mínimo da assinatura
-     * @param string $id
+     *
+     * @param  string  $id
      */
     public function updateMinimumPrice($id)
     {
@@ -92,7 +96,8 @@ class Subscription extends ApiAdapter
 
     /**
      * Ativar faturamento manual
-     * @param string $id
+     *
+     * @param  string  $id
      */
     public function enableManualBilling($id)
     {
@@ -101,7 +106,8 @@ class Subscription extends ApiAdapter
 
     /**
      * Desativar faturamento manual
-     * @param string $id
+     *
+     * @param  string  $id
      */
     public function disableManualBilling($id)
     {

@@ -61,10 +61,10 @@ class Webhook extends ApiAdapter
     /**
      * Processar payload do webhook
      */
-    public function processWebhook(string $payload, string $signature = null): array
+    public function processWebhook(string $payload, ?string $signature = null): array
     {
         if ($signature && config('pagarme.webhook_secret')) {
-            if (!$this->verifySignature($payload, $signature, config('pagarme.webhook_secret'))) {
+            if (! $this->verifySignature($payload, $signature, config('pagarme.webhook_secret'))) {
                 throw new \Exception('Invalid webhook signature');
             }
         }

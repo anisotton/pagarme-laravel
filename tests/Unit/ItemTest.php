@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Anisotton\Pagarme\Tests\Unit;
 
 use Anisotton\Pagarme\Contracts\Payments\Item;
@@ -12,7 +14,7 @@ class ItemTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->item = new Item();
+        $this->item = new Item;
     }
 
     public function test_can_create_item(): void

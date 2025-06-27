@@ -1,21 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Anisotton\Pagarme\Endpoints;
 
 use Anisotton\Pagarme\Contracts\Payments\Charge;
 use Anisotton\Pagarme\Contracts\Payments\Item;
 use Anisotton\Pagarme\Contracts\Payments\Order;
 use Anisotton\Pagarme\Contracts\Wallet\Address;
-use Anisotton\Pagarme\Contracts\Wallet\Customer;
 use Anisotton\Pagarme\Contracts\Wallet\CreditCard;
+use Anisotton\Pagarme\Contracts\Wallet\Customer;
 
 class Payload
 {
     private $order;
+
     private $charge;
+
     private $item;
+
     private $address;
+
     private $customer;
+
     private $card;
 
     public function __construct(
@@ -74,19 +81,23 @@ class Payload
         return $this->address->address(...$args);
     }
 
-    public function OrderInterface() {
+    public function OrderInterface()
+    {
         return $this->order;
     }
 
-    public function ChargeInterface() {
+    public function ChargeInterface()
+    {
         return $this->charge;
     }
 
-    public function ItemInterface() {
+    public function ItemInterface()
+    {
         return $this->item;
     }
 
-    public function CustomerInterface() {
+    public function CustomerInterface()
+    {
         return $this->customer;
     }
 }

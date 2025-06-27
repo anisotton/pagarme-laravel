@@ -30,9 +30,9 @@ abstract class ApiAdapter
     {
         return [
             'Content-Type' => 'application/json',
-            'Authorization' => 'Basic ' . base64_encode(config('pagarme.api_key') . ':'),
+            'Authorization' => 'Basic '.base64_encode(config('pagarme.api_key').':'),
             'Accept' => 'application/json',
-            'User-Agent' => 'Pagarme-Laravel/' . $this->getPackageVersion(),
+            'User-Agent' => 'Pagarme-Laravel/'.$this->getPackageVersion(),
         ];
     }
 
@@ -40,9 +40,9 @@ abstract class ApiAdapter
     {
         return [
             'Content-Type' => 'multipart/form-data',
-            'Authorization' => 'Basic ' . base64_encode(config('pagarme.api_key') . ':'),
+            'Authorization' => 'Basic '.base64_encode(config('pagarme.api_key').':'),
             'Accept' => 'application/json',
-            'User-Agent' => 'Pagarme-Laravel/' . $this->getPackageVersion(),
+            'User-Agent' => 'Pagarme-Laravel/'.$this->getPackageVersion(),
         ];
     }
 
@@ -65,7 +65,7 @@ abstract class ApiAdapter
             $apiVersion .= '/';
         }
 
-        return $baseUrl . $apiVersion . ltrim($url, '/');
+        return $baseUrl.$apiVersion.ltrim($url, '/');
     }
 
     public function post(string $url, array $data = [], bool $multipart = false): ResponseInterface
@@ -76,11 +76,12 @@ abstract class ApiAdapter
         try {
             $response = $this->client->request('POST', $fullUrl, $options);
             $this->logRequest('POST', $fullUrl, $data);
+
             return $response;
         } catch (RequestException $e) {
             $this->handleException($e);
         } catch (GuzzleException $e) {
-            throw new Exception('HTTP Request failed: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new Exception('HTTP Request failed: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -92,11 +93,12 @@ abstract class ApiAdapter
         try {
             $response = $this->client->request('PUT', $fullUrl, $options);
             $this->logRequest('PUT', $fullUrl, $data);
+
             return $response;
         } catch (RequestException $e) {
             $this->handleException($e);
         } catch (GuzzleException $e) {
-            throw new Exception('HTTP Request failed: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new Exception('HTTP Request failed: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -108,11 +110,12 @@ abstract class ApiAdapter
         try {
             $response = $this->client->request('PATCH', $fullUrl, $options);
             $this->logRequest('PATCH', $fullUrl, $data);
+
             return $response;
         } catch (RequestException $e) {
             $this->handleException($e);
         } catch (GuzzleException $e) {
-            throw new Exception('HTTP Request failed: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new Exception('HTTP Request failed: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -128,11 +131,12 @@ abstract class ApiAdapter
         try {
             $response = $this->client->request('GET', $fullUrl, $options);
             $this->logRequest('GET', $fullUrl, $queryParams);
+
             return $response;
         } catch (RequestException $e) {
             $this->handleException($e);
         } catch (GuzzleException $e) {
-            throw new Exception('HTTP Request failed: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new Exception('HTTP Request failed: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -144,11 +148,12 @@ abstract class ApiAdapter
         try {
             $response = $this->client->request('DELETE', $fullUrl, $options);
             $this->logRequest('DELETE', $fullUrl);
+
             return $response;
         } catch (RequestException $e) {
             $this->handleException($e);
         } catch (GuzzleException $e) {
-            throw new Exception('HTTP Request failed: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new Exception('HTTP Request failed: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -170,7 +175,7 @@ abstract class ApiAdapter
             throw new Exception("HTTP {$statusCode}: {$body}", $statusCode, $e);
         }
 
-        throw new Exception('Request failed: ' . $e->getMessage(), $e->getCode(), $e);
+        throw new Exception('Request failed: '.$e->getMessage(), $e->getCode(), $e);
     }
 
     protected function setHeaders(bool $multipart = false, ?array $data = null): array

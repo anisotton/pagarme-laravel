@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Anisotton\Pagarme\Contracts\Payments;
 
 use Exception;

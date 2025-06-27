@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Anisotton\Pagarme\Commands;
 
 use Illuminate\Console\Command;
@@ -19,9 +21,9 @@ class PagarmeCommand extends Command
 
         $this->newLine();
         $this->comment('Configuration file: config/pagarme.php');
-        $this->comment('API Key: ' . (config('pagarme.api_key') ? 'Set ✓' : 'Not configured ✗'));
-        $this->comment('Base URL: ' . config('pagarme.base_url'));
-        $this->comment('API Version: ' . config('pagarme.api_version'));
+        $this->comment('API Key: '.(config('pagarme.api_key') ? 'Set ✓' : 'Not configured ✗'));
+        $this->comment('Base URL: '.config('pagarme.base_url'));
+        $this->comment('API Version: '.config('pagarme.api_version'));
 
         return self::SUCCESS;
     }

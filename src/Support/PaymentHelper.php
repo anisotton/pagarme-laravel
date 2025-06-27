@@ -172,7 +172,7 @@ class PaymentHelper
             }
 
             $sum += $digit;
-            $alternate = !$alternate;
+            $alternate = ! $alternate;
         }
 
         return $sum % 10 === 0;

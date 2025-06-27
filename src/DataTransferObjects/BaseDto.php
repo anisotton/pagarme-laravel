@@ -32,6 +32,7 @@ abstract class BaseDto
             if ($item instanceof BaseDto) {
                 return $item->toArray();
             }
+
             return $item;
         }, $array);
     }

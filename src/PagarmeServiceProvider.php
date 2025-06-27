@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Anisotton\Pagarme;
 
-use GuzzleHttp\Client;
-use Illuminate\Support\ServiceProvider;
 use Anisotton\Pagarme\Commands\PagarmeCommand;
 use Anisotton\Pagarme\Contracts\Payments\Charge;
 use Anisotton\Pagarme\Contracts\Payments\Item;
@@ -14,6 +12,8 @@ use Anisotton\Pagarme\Contracts\Wallet\Address;
 use Anisotton\Pagarme\Contracts\Wallet\CreditCard;
 use Anisotton\Pagarme\Contracts\Wallet\Customer;
 use Anisotton\Pagarme\Endpoints\Payload;
+use GuzzleHttp\Client;
+use Illuminate\Support\ServiceProvider;
 
 class PagarmeServiceProvider extends ServiceProvider
 {

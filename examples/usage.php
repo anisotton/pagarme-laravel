@@ -6,7 +6,7 @@
  * Este arquivo demonstra como usar o pacote em uma aplicação Laravel
  */
 
-use Keepcloud\Pagarme\Facades\Pagarme;
+use Anisotton\Pagarme\Facades\Pagarme;
 
 // 1. Criando um cliente
 $customerData = [

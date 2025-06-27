@@ -1,21 +1,37 @@
 {
     "name": "anisotton/pagarme-laravel",
-    "description": "A Laravel package to integrate with Pagar.me API",
+    "description": "A Laravel package to integrate with Pagar.me API v5 - Modern, type-safe, and feature-rich payment gateway integration for Laravel 12+",
     "keywords": [
         "laravel",
         "pagarme",
         "payment",
-        "api"
+        "gateway",
+        "api",
+        "pix",
+        "boleto",
+        "credit-card",
+        "subscription",
+        "webhook",
+        "brazil",
+        "php8",
+        "laravel12"
     ],
+    "type": "library",
     "homepage": "https://github.com/anisotton/pagarme-laravel",
     "license": "MIT",
     "authors": [
         {
             "name": "Anderson Isotton",
             "email": "anderson@isotton.com.br",
-            "homepage": "https://github.com/anisotton/"
+            "homepage": "https://github.com/anisotton/",
+            "role": "Developer"
         }
     ],
+    "support": {
+        "issues": "https://github.com/anisotton/pagarme-laravel/issues",
+        "source": "https://github.com/anisotton/pagarme-laravel",
+        "docs": "https://github.com/anisotton/pagarme-laravel/blob/main/README.md"
+    },
     "require": {
         "php": "^8.3",
         "guzzlehttp/guzzle": "^7.8",
@@ -26,39 +42,60 @@
     "require-dev": {
         "laravel/pint": "^1.13",
         "orchestra/testbench": "^10.0",
-        "phpunit/phpunit": "^11.0"
+        "phpunit/phpunit": "^11.0",
+        "mockery/mockery": "^1.6",
+        "phpstan/phpstan": "^1.10"
     },
     "autoload": {
         "psr-4": {
-            "Keepcloud\\Pagarme\\": "src/"
+            "Anisotton\\Pagarme\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Keepcloud\\Pagarme\\Tests\\": "tests/"
+            "Anisotton\\Pagarme\\Tests\\": "tests/"
         }
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "analyse": "vendor/bin/phpstan analyse",
+        "post-autoload-dump": [
+            "@clear-cache"
+        ],
+        "clear-cache": [
+            "@php artisan package:discover --ansi || true",
+            "@php artisan config:cache --ansi || true"
+        ]
     },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
             "phpstan/extension-installer": true
-        }
+        },
+        "optimize-autoloader": true,
+        "preferred-install": "dist"
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Keepcloud\\Pagarme\\PagarmeServiceProvider"
+                "Anisotton\\Pagarme\\PagarmeServiceProvider"
             ],
             "aliases": {
-                "Pagarme": "Keepcloud\\Pagarme\\Facades\\Pagarme"
+                "Pagarme": "Anisotton\\Pagarme\\Facades\\Pagarme"
             }
+        },
+        "branch-alias": {
+            "dev-main": "1.0-dev"
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/anisotton"
+        }
+    ]
 }

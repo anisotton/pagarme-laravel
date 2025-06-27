@@ -1,6 +1,6 @@
 <?php
 
-namespace Keepcloud\Pagarme\Contracts\Wallet;
+namespace Anisotton\Pagarme\Contracts\Wallet;
 
 final readonly class CreditCard
 {

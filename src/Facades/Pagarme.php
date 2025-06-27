@@ -1,16 +1,16 @@
 <?php
 
-namespace Keepcloud\Pagarme\Facades;
+namespace Anisotton\Pagarme\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Keepcloud\Pagarme\Pagarme
+ * @see \Anisotton\Pagarme\Pagarme
  */
 class Pagarme extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \Keepcloud\Pagarme\Pagarme::class;
+        return \Anisotton\Pagarme\Pagarme::class;
     }
 }

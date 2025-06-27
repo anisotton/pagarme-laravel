@@ -1,9 +1,9 @@
 <?php
 
-namespace Keepcloud\Pagarme\Tests\Unit;
+namespace Anisotton\Pagarme\Tests\Unit;
 
-use Keepcloud\Pagarme\Contracts\Payments\Item;
-use Keepcloud\Pagarme\Tests\TestCase;
+use Anisotton\Pagarme\Contracts\Payments\Item;
+use Anisotton\Pagarme\Tests\TestCase;
 
 class ItemTest extends TestCase
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Keepcloud\Pagarme\Endpoints;
+namespace Anisotton\Pagarme\Endpoints;
 
-use Keepcloud\Pagarme\Contracts\Payments\Charge;
-use Keepcloud\Pagarme\Contracts\Payments\Item;
-use Keepcloud\Pagarme\Contracts\Payments\Order;
-use Keepcloud\Pagarme\Contracts\Wallet\Address;
-use Keepcloud\Pagarme\Contracts\Wallet\Customer;
-use Keepcloud\Pagarme\Contracts\Wallet\CreditCard;
+use Anisotton\Pagarme\Contracts\Payments\Charge;
+use Anisotton\Pagarme\Contracts\Payments\Item;
+use Anisotton\Pagarme\Contracts\Payments\Order;
+use Anisotton\Pagarme\Contracts\Wallet\Address;
+use Anisotton\Pagarme\Contracts\Wallet\Customer;
+use Anisotton\Pagarme\Contracts\Wallet\CreditCard;
 
 class Payload
 {

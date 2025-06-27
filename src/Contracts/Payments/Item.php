@@ -1,6 +1,6 @@
 <?php
 
-namespace Keepcloud\Pagarme\Contracts\Payments;
+namespace Anisotton\Pagarme\Contracts\Payments;
 
 final readonly class Item
 {

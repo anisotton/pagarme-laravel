@@ -1,8 +1,10 @@
 <?php
 
-namespace Keepcloud\Pagarme\Endpoints;
+declare(strict_types=1);
 
-use Keepcloud\Pagarme\Utils\ApiAdapter;
+namespace Anisotton\Pagarme\Endpoints;
+
+use Anisotton\Pagarme\Utils\ApiAdapter;
 
 class Recipient extends ApiAdapter
 {

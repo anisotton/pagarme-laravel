@@ -1,17 +1,19 @@
 <?php
 
-namespace Keepcloud\Pagarme;
+declare(strict_types=1);
 
+namespace Anisotton\Pagarme;
+
+use Anisotton\Pagarme\Commands\PagarmeCommand;
+use Anisotton\Pagarme\Contracts\Payments\Charge;
+use Anisotton\Pagarme\Contracts\Payments\Item;
+use Anisotton\Pagarme\Contracts\Payments\Order;
+use Anisotton\Pagarme\Contracts\Wallet\Address;
+use Anisotton\Pagarme\Contracts\Wallet\CreditCard;
+use Anisotton\Pagarme\Contracts\Wallet\Customer;
+use Anisotton\Pagarme\Endpoints\Payload;
 use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
-use Keepcloud\Pagarme\Commands\PagarmeCommand;
-use Keepcloud\Pagarme\Contracts\Payments\Charge;
-use Keepcloud\Pagarme\Contracts\Payments\Item;
-use Keepcloud\Pagarme\Contracts\Payments\Order;
-use Keepcloud\Pagarme\Contracts\Wallet\Address;
-use Keepcloud\Pagarme\Contracts\Wallet\CreditCard;
-use Keepcloud\Pagarme\Contracts\Wallet\Customer;
-use Keepcloud\Pagarme\Endpoints\Payload;
 
 class PagarmeServiceProvider extends ServiceProvider
 {
@@ -19,29 +21,62 @@ class PagarmeServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/pagarme.php', 'pagarme');
 
-        // Register Guzzle HTTP Client
-        $this->app->singleton(Client::class, function () {
+        $this->registerGuzzleClient();
+        $this->registerContracts();
+        $this->registerEndpoints();
+        $this->registerMainService();
+    }
+
+    public function boot(): void
+    {
+        $this->publishConfig();
+        $this->registerCommands();
+    }
+
+    protected function registerGuzzleClient(): void
+    {
+        $this->app->singleton(Client::class, function ($app) {
             return new Client([
-                'timeout' => 30,
-                'connect_timeout' => 10,
+                'timeout' => config('pagarme.timeout', 30),
+                'connect_timeout' => config('pagarme.connect_timeout', 10),
+                'verify' => true,
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                ],
             ]);
         });
+    }
 
-        // Register Contract classes
+    protected function registerContracts(): void
+    {
         $this->app->singleton(Order::class);
         $this->app->singleton(Charge::class);
         $this->app->singleton(Item::class);
         $this->app->singleton(Address::class);
         $this->app->singleton(Customer::class);
         $this->app->singleton(CreditCard::class);
+    }
 
-        // Register Endpoint classes
-        $this->app->singleton(Endpoints\Customer::class);
-        $this->app->singleton(Endpoints\Recipient::class);
-        $this->app->singleton(Endpoints\Charge::class);
-        $this->app->singleton(Endpoints\Order::class);
-        $this->app->singleton(Endpoints\Subscription::class);
+    protected function registerEndpoints(): void
+    {
+        $endpoints = [
+            Endpoints\Customer::class,
+            Endpoints\Recipient::class,
+            Endpoints\Charge::class,
+            Endpoints\Order::class,
+            Endpoints\Subscription::class,
+            Endpoints\Plan::class,
+            Endpoints\Webhook::class,
+        ];
 
+        foreach ($endpoints as $endpoint) {
+            $this->app->singleton($endpoint);
+        }
+    }
+
+    protected function registerMainService(): void
+    {
         // Register Payload class
         $this->app->singleton(Payload::class, function ($app) {
             return new Payload(
@@ -62,21 +97,50 @@ class PagarmeServiceProvider extends ServiceProvider
                 $app->make(Endpoints\Charge::class),
                 $app->make(Endpoints\Order::class),
                 $app->make(Payload::class),
-                $app->make(Endpoints\Subscription::class)
+                $app->make(Endpoints\Subscription::class),
+                $app->make(Endpoints\Plan::class),
+                $app->make(Endpoints\Webhook::class)
             );
         });
     }
 
-    public function boot(): void
+    protected function publishConfig(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/pagarme.php' => config_path('pagarme.php'),
             ], 'pagarme-config');
+        }
+    }
 
+    protected function registerCommands(): void
+    {
+        if ($this->app->runningInConsole()) {
             $this->commands([
                 PagarmeCommand::class,
             ]);
         }
+    }
+
+    public function provides(): array
+    {
+        return [
+            Client::class,
+            Order::class,
+            Charge::class,
+            Item::class,
+            Address::class,
+            Customer::class,
+            CreditCard::class,
+            Endpoints\Customer::class,
+            Endpoints\Recipient::class,
+            Endpoints\Charge::class,
+            Endpoints\Order::class,
+            Endpoints\Subscription::class,
+            Endpoints\Plan::class,
+            Endpoints\Webhook::class,
+            Payload::class,
+            Pagarme::class,
+        ];
     }
 }

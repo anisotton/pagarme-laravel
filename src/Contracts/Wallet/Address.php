@@ -1,6 +1,8 @@
 <?php
 
-namespace Keepcloud\Pagarme\Contracts\Wallet;
+declare(strict_types=1);
+
+namespace Anisotton\Pagarme\Contracts\Wallet;
 
 final readonly class Address
 {

@@ -1,6 +1,6 @@
 {
     "name": "anisotton/pagarme-laravel",
-    "version": "1.0.0",
+    "version": "0.0.0",
     "description": "A Laravel package to integrate with Pagar.me API",
     "keywords": [
         "laravel",

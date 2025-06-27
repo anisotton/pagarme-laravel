@@ -4,166 +4,182 @@ namespace Keepcloud\Pagarme\Utils;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class ApiAdapter
 {
-    private $client;
+    protected Client $client;
 
     public function __construct(Client $client)
     {
         $this->client = $client;
     }
 
-    public function setClient(Client $client)
+    public function setClient(Client $client): void
     {
         $this->client = $client;
     }
 
-    public function getHeader()
+    protected function getHeader(): array
     {
         return [
             'Content-Type' => 'application/json',
             'Authorization' => 'Basic ' . base64_encode(config('pagarme.api_key') . ':'),
+            'Accept' => 'application/json',
         ];
     }
 
-    public function getFormDataHeader()
+    protected function getFormDataHeader(): array
     {
-        return $headers = [
+        return [
             'Content-Type' => 'multipart/form-data',
             'Authorization' => 'Basic ' . base64_encode(config('pagarme.api_key') . ':'),
+            'Accept' => 'application/json',
         ];
     }
 
-    public function getUrl(string $url)
+    protected function getUrl(string $url): string
     {
         $baseUrl = config('pagarme.base_url');
 
-        if (substr($baseUrl, -1) != '/') {
+        if (! str_ends_with($baseUrl, '/')) {
             $baseUrl .= '/';
         }
 
         $apiVersion = config('pagarme.api_version');
 
-        if (substr($apiVersion, -1) != '/') {
+        if (! str_ends_with($apiVersion, '/')) {
             $apiVersion .= '/';
         }
 
-        return $baseUrl . $apiVersion . $url;
+        return $baseUrl . $apiVersion . ltrim($url, '/');
     }
 
-    public function post(string $url, array $data, $multipart = false)
+    public function post(string $url, array $data = [], bool $multipart = false): ResponseInterface
     {
-        $env = env('PAGARME_API_KEY');
-
         $fullUrl = $this->getUrl($url);
-
         $options = $this->setHeaders($multipart, $data);
 
         try {
             return $this->client->request('POST', $fullUrl, $options);
-        } catch (Exception $e) {
-            if ($e->getCode() == 400) {
-                throw new Exception($this->getResponseErrorDescription($e));
-            }
-
-            throw new Exception($e->getMessage());
+        } catch (RequestException $e) {
+            $this->handleException($e);
+        } catch (GuzzleException $e) {
+            throw new Exception('HTTP Request failed: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 
-    public function put(string $url, $data = null, $multipart = false)
+    public function put(string $url, array $data = [], bool $multipart = false): ResponseInterface
     {
         $fullUrl = $this->getUrl($url);
-
         $options = $this->setHeaders($multipart, $data);
 
         try {
             return $this->client->request('PUT', $fullUrl, $options);
-        } catch (Exception $e) {
-            if ($e->getCode() == 400) {
-                throw new Exception($this->getResponseErrorDescription($e));
-            }
-
-            throw new Exception($e->getMessage());
+        } catch (RequestException $e) {
+            $this->handleException($e);
+        } catch (GuzzleException $e) {
+            throw new Exception('HTTP Request failed: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 
-    public function patch(string $url, array $data = null, $multipart = false)
+    public function patch(string $url, array $data = [], bool $multipart = false): ResponseInterface
     {
         $fullUrl = $this->getUrl($url);
-
         $options = $this->setHeaders($multipart, $data);
 
         try {
             return $this->client->request('PATCH', $fullUrl, $options);
-        } catch (Exception $e) {
-            if ($e->getCode() == 400) {
-                throw new Exception($this->getResponseErrorDescription($e));
-            }
-
-            throw new Exception($e->getMessage());
+        } catch (RequestException $e) {
+            $this->handleException($e);
+        } catch (GuzzleException $e) {
+            throw new Exception('HTTP Request failed: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 
-    public function get(string $url, array $queryParams = [], $multipart = false)
+    public function get(string $url, array $queryParams = [], bool $multipart = false): ResponseInterface
     {
         $fullUrl = $this->getUrl($url);
-
         $options = $this->setHeaders($multipart);
 
-        if (!empty($queryParams)) {
-            $fullUrl .= '?' . http_build_query($queryParams);
+        if (! empty($queryParams)) {
+            $options['query'] = $queryParams;
         }
 
         try {
             return $this->client->request('GET', $fullUrl, $options);
-        } catch (Exception $e) {
-            if ($e->getCode() == 400) {
-                throw new Exception($this->getResponseErrorDescription($e));
-            }
-
-            throw new Exception($e->getMessage());
+        } catch (RequestException $e) {
+            $this->handleException($e);
+        } catch (GuzzleException $e) {
+            throw new Exception('HTTP Request failed: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 
-    public function delete(string $url, $multipart = false)
+    public function delete(string $url, bool $multipart = false): ResponseInterface
     {
         $fullUrl = $this->getUrl($url);
-
         $options = $this->setHeaders($multipart);
 
         try {
             return $this->client->request('DELETE', $fullUrl, $options);
-        } catch (Exception $e) {
-            if ($e->getCode() == 400) {
-                throw new Exception($this->getResponseErrorDescription($e));
+        } catch (RequestException $e) {
+            $this->handleException($e);
+        } catch (GuzzleException $e) {
+            throw new Exception('HTTP Request failed: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    protected function handleException(RequestException $e): void
+    {
+        if ($e->hasResponse()) {
+            $response = $e->getResponse();
+            $statusCode = $response->getStatusCode();
+            $body = $response->getBody()->getContents();
+
+            $errorData = json_decode($body, true);
+
+            if (json_last_error() === JSON_ERROR_NONE && isset($errorData['message'])) {
+                throw new Exception($errorData['message'], $statusCode, $e);
             }
 
-            throw new Exception($e->getMessage());
-        }
-    }
-
-    public function getResponseErrorDescription($e)
-    {
-        if ($e->getCode() == 400) {
-            return json_decode($e->getResponse()->getBody()->getContents(), true);
+            throw new Exception("HTTP {$statusCode}: {$body}", $statusCode, $e);
         }
 
-        throw new Exception('Não existe resposta de erro do servidor');
+        throw new Exception('Request failed: ' . $e->getMessage(), $e->getCode(), $e);
     }
 
-    public function setHeaders(bool $multipart = false, array $data = null): array
+    protected function setHeaders(bool $multipart = false, ?array $data = null): array
     {
+        $options = [];
+
         if ($multipart) {
             $options['headers'] = $this->getFormDataHeader();
-        }
-
-        $options['headers'] = $this->getHeader();
-
-        if ($data) {
-            $options['body'] = json_encode($data);
+            if ($data) {
+                $options['multipart'] = $this->buildMultipartData($data);
+            }
+        } else {
+            $options['headers'] = $this->getHeader();
+            if ($data) {
+                $options['json'] = $data;
+            }
         }
 
         return $options;
+    }
+
+    protected function buildMultipartData(array $data): array
+    {
+        $multipart = [];
+
+        foreach ($data as $key => $value) {
+            $multipart[] = [
+                'name' => $key,
+                'contents' => is_array($value) ? json_encode($value) : (string) $value,
+            ];
+        }
+
+        return $multipart;
     }
 }

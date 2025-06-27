@@ -2,11 +2,11 @@
 
 namespace Keepcloud\Pagarme\Contracts\Wallet;
 
-final class Address
+final readonly class Address
 {
-    //  Clientes com endereços Internacionais -> Clientes que coloquem o passaporte como documento podem transacionar, colocando o endereço internacional. e em vez do CEP o ZIP Code do país. Não é possível um cliente usar o passaporte e colocar um endereço nacional.
+    // Clientes com endereços Internacionais -> Clientes que coloquem o passaporte como documento podem transacionar, colocando o endereço internacional. e em vez do CEP o ZIP Code do país. Não é possível um cliente usar o passaporte e colocar um endereço nacional.
 
-    const CREATE_ADDRESS = [
+    public const CREATE_ADDRESS = [
         'line_1' => 'string',
         'line_2' => 'string',
         'zip_code' => 'string',
@@ -16,7 +16,7 @@ final class Address
         'metadata' => 'array',
     ];
 
-    const UPDATE_ADDRESS =  [
+    public const UPDATE_ADDRESS = [
         'line_1' => 'string',
         'line_2' => 'string',
         'zip_code' => 'string',
@@ -26,7 +26,7 @@ final class Address
         'metadata' => 'array',
     ];
 
-    const SHIPPING_ADDRESS =  [
+    public const SHIPPING_ADDRESS = [
         'amount' => 'numeric',
         'description' => 'string',
         'recipient_name' => 'string',
@@ -41,7 +41,7 @@ final class Address
         'type' => 'string',
     ];
 
-    const BILLING_ADDRESS = [
+    public const BILLING_ADDRESS = [
         'line_1' => 'string',
         'zip_code' => 'string',
         'city' => 'string',
@@ -49,7 +49,7 @@ final class Address
         'country' => 'string',
     ];
 
-    const PHONE_NUMBER = [
+    public const PHONE_NUMBER = [
         'home_phone' => 'array',
         'home_phone.country_code' => 'string',
         'home_phone.area_code' => 'string',
@@ -60,7 +60,7 @@ final class Address
         'mobile_phone.number' => 'string',
     ];
 
-    public function address(string $lineOne, string $lineTwo, string $zipCode, string $city, string $state, string $country)
+    public function address(string $lineOne, string $lineTwo, string $zipCode, string $city, string $state, string $country): array
     {
         return [
             'line_1' => $lineOne,

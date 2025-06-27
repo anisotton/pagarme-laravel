@@ -2,9 +2,9 @@
 
 namespace Keepcloud\Pagarme\Contracts\Wallet;
 
-final class CreditCard
+final readonly class CreditCard
 {
-    const CREATE_CREDIT_CARD = [
+    public const CREATE_CREDIT_CARD = [
         'number' => 'string',
         'holder_name' => 'string',
         'holder_document' => 'string',
@@ -17,15 +17,15 @@ final class CreditCard
         'metadata' => 'array',
     ];
 
-    const UPDATE_CREDIT_CARD = [
+    public const UPDATE_CREDIT_CARD = [
         'billing_address' => 'array',
         'holder_name' => 'string',
         'exp_month' => 'integer|min:1|max:12',
         'exp_year' => 'date_format:Y|after_or_equal:now',
     ];
 
-    //  Atenção! A entidade de billing address do cartão não é tokenizada. Logo, ao criar um pedido/cobrança com token também será preciso informar o billing address.
-    const CREATE_CREDIT_CARD_TOKEN = [
+    // Atenção! A entidade de billing address do cartão não é tokenizada. Logo, ao criar um pedido/cobrança com token também será preciso informar o billing address.
+    public const CREATE_CREDIT_CARD_TOKEN = [
         'type' => 'string',
         'card' => 'array',
         'card.number' => 'string',
@@ -46,7 +46,7 @@ final class CreditCard
         int $expMonth,
         string $expYear,
         string $cvv,
-    ){
+    ): array {
         return [
             'number' => $number,
             'holder_name' => $holder,

@@ -48,7 +48,7 @@ abstract class ApiAdapter
 
     protected function getPackageVersion(): string
     {
-        return '1.0.0';
+        return '1.1.2';
     }
 
     protected function getUrl(string $url): string

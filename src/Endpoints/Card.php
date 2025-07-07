@@ -63,10 +63,11 @@ class Card extends ApiAdapter
     /**
      * Criar token do cartão
      */
-    public function createToken(array $data, string $appId): ResponseInterface
+    public function createToken(array $data): ResponseInterface
     {
         // This endpoint uses public key authentication via appId query parameter
-        $queryParams = ['appId' => $appId];
+        $publicKey = config('pagarme.public_key');
+        $queryParams = ['appId' => $publicKey];
 
         return $this->postWithPublicKey('tokens', $data, $queryParams);
     }

@@ -16,6 +16,8 @@ return [
 
     'api_key' => env('PAGARME_API_KEY', 'ak_test_*'),
 
+    'public_key' => env('PAGARME_PUBLIC_KEY', 'pk_test_*'),
+
     'base_url' => env('PAGARME_BASE_URL', 'https://api.pagar.me/core'),
 
     'api_version' => env('PAGARME_API_VERSION', 'v5'),

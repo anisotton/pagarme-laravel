@@ -106,13 +106,12 @@ Pagarme::card()->remove('cus_123', 'card_456');
 $renewedCard = Pagarme::card()->renew('cus_123', 'card_456');
 ```
 
-### `createToken($data, $appId)`
+### `createToken($data)`
 
-**Descrição:** Cria um token para um cartão. Este endpoint usa autenticação com chave pública.
+**Descrição:** Cria um token para um cartão. Este endpoint usa autenticação com chave pública configurada no arquivo de configuração.
 
 **Parâmetros:**
 - `$data` (array): Dados do cartão para tokenização
-- `$appId` (string): Chave pública da aplicação
 
 **Exemplo:**
 ```php
@@ -133,7 +132,7 @@ $token = Pagarme::card()->createToken([
             'country' => 'BR'
         ]
     ]
-], 'pk_test_abc123');
+]);
 ```
 
 ### `getBinInfo($bin)`

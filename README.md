@@ -196,7 +196,7 @@ $tokenData = [
     ]
 ];
 
-$token = Pagarme::card()->createToken($tokenData, $publicKey);
+$token = Pagarme::card()->createToken($tokenData);
 ```
 
 #### Usando Token para Criar Cartão
@@ -433,7 +433,7 @@ $installments = PaymentHelper::generateInstallments(10000, 12, 2.5);
 - `update($customerId, $cardId, $data)` - Editar cartão
 - `remove($customerId, $cardId)` - Excluir cartão
 - `renew($customerId, $cardId)` - Renovar cartão
-- `createToken($data, $appId)` - Criar token do cartão
+- `createToken($data)` - Criar token do cartão (usa public_key do config)
 - `getBinInfo($bin)` - Obter informações do BIN
 
 ### Charge (Cobranças)

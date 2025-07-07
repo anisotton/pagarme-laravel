@@ -1,5 +1,6 @@
 {
     "name": "anisotton/pagarme-laravel",
+    "version": "1.1.2",
     "description": "A Laravel package to integrate with Pagar.me API v5 - Modern, type-safe, and feature-rich payment gateway integration for Laravel 12+",
     "keywords": [
         "laravel",
